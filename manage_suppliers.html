@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Suppliers</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4c8bf5, #6dd5ed);
+            color: #fff;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hide {
+            transform: translateX(-250px);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        header {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            position: relative;
+        }
+
+        .logout {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff5e57;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout:hover {
+            background-color: #e04c45;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        table th, table td {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        table th {
+            background: rgba(0, 0, 0, 0.9);
+            font-weight: bold;
+        }
+
+        .form-section {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-section input, .form-section button {
+            padding: 0.7rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-section input {
+            width: 20%;
+        }
+
+        .form-section button {
+            background-color: #4c8bf5;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-section button:hover {
+            background-color: #3a6dcf;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar" id="sidebar">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <a href="manage_admins.html">Manage Admins</a>
+        <a href="manage_petugas.html">Manage Petugas</a>
+        <a href="manage_suppliers.html">Manage Suppliers</a>
+        <a href="manage_racks.html">Manage Racks</a>
+        <a href="manage_items.html">Manage Items</a>
+        <a href="approve_requests.html">Approve Requests</a>
+    </div>
+
+    <div class="content">
+        <header>
+            Manage Suppliers
+            <button class="logout" onclick="location.href='login.html'">Logout</button>
+        </header>
+
+        <div class="form-section">
+            <h2>Add New Supplier</h2>
+            <form id="addSupplierForm">
+                <input type="text" id="supplierName" name="supplierName" placeholder="Supplier Name" required>
+                <input type="email" id="supplierEmail" name="supplierEmail" placeholder="Supplier Email" required>
+                <input type="text" id="supplierPhone" name="supplierPhone" placeholder="Supplier Phone" required>
+                <button type="submit">Add Supplier</button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="supplierTable">
+                <!-- Dynamic rows will be inserted here -->
+                <tr>
+                    <td>1</td>
+                    <td>ABC Supplies</td>
+                    <td>abc.supplies@example.com</td>
+                    <td>+123456789</td>
+                    <td>
+                        <button onclick="editSupplier(1)">Edit</button>
+                        <button onclick="deleteSupplier(1)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        &copy; 2025 IT Workshop Inventory System
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hide');
+        }
+
+        document.getElementById('addSupplierForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('supplierName').value;
+            const email = document.getElementById('supplierEmail').value;
+            const phone = document.getElementById('supplierPhone').value;
+
+            // Example: Add supplier to the table dynamically
+            const table = document.getElementById('supplierTable');
+            const row = table.insertRow();
+
+            row.innerHTML = `
+                <td>${table.rows.length}</td>
+                <td>${name}</td>
+                <td>${email}</td>
+                <td>${phone}</td>
+                <td>
+                    <button onclick="editSupplier(${table.rows.length})">Edit</button>
+                    <button onclick="deleteSupplier(${table.rows.length})">Delete</button>
+                </td>
+            `;
+
+            // Clear form fields
+            document.getElementById('supplierName').value = '';
+            document.getElementById('supplierEmail').value = '';
+            document.getElementById('supplierPhone').value = '';
+        });
+
+        function editSupplier(id) {
+            alert(`Edit Supplier with ID: ${id}`);
+        }
+
+        function deleteSupplier(id) {
+            alert(`Delete Supplier with ID: ${id}`);
+        }
+    </script>
+</body>
+</html>

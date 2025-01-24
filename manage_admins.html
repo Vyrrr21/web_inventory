@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Admins</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4c8bf5, #6dd5ed);
+            color: #fff;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hide {
+            transform: translateX(-250px);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        header {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            position: relative;
+        }
+
+        .logout {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff5e57;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout:hover {
+            background-color: #e04c45;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        table th, table td {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        table th {
+            background: rgba(0, 0, 0, 0.9);
+            font-weight: bold;
+        }
+
+        .form-section {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-section input, .form-section button {
+            padding: 0.7rem;
+            margin: 0.5rem;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-section input {
+            width: 20%;
+        }
+
+        .form-section button {
+            background-color: #4c8bf5;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-section button:hover {
+            background-color: #3a6dcf;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar" id="sidebar">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <a href="manage_admins.html">Manage Admins</a>
+        <a href="manage_petugas.html">Manage Petugas</a>
+        <a href="manage_suppliers.html">Manage Suppliers</a>
+        <a href="manage_racks.html">Manage Racks</a>
+        <a href="manage_items.html">Manage Items</a>
+        <a href="approve_requests.html">Approve Requests</a>
+    </div>
+
+    <div class="content">
+        <header>
+            Manage Admins
+            <button class="logout" onclick="location.href='login.html'">Logout</button>
+        </header>
+
+        <div class="form-section">
+            <h2>Add New Admin</h2>
+            <form id="addAdminForm">
+                <input type="text" id="adminName" name="adminName" placeholder="Admin Name" required>
+                <input type="email" id="adminEmail" name="adminEmail" placeholder="Admin Email" required>
+                <input type="password" id="adminPassword" name="adminPassword" placeholder="Admin Password" required>
+                <button type="submit">Add Admin</button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="adminTable">
+                <!-- Dynamic rows will be inserted here -->
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>john.doe@example.com</td>
+                    <td>
+                        <button onclick="editAdmin(1)">Edit</button>
+                        <button onclick="deleteAdmin(1)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        &copy; 2025 IT Workshop Inventory System
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hide');
+        }
+
+        document.getElementById('addAdminForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('adminName').value;
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            // Example: Add admin to the table dynamically
+            const table = document.getElementById('adminTable');
+            const row = table.insertRow();
+
+            row.innerHTML = `
+                <td>${table.rows.length}</td>
+                <td>${name}</td>
+                <td>${email}</td>
+                <td>
+                    <button onclick="editAdmin(${table.rows.length})">Edit</button>
+                    <button onclick="deleteAdmin(${table.rows.length})">Delete</button>
+                </td>
+            `;
+
+            // Clear form fields
+            document.getElementById('adminName').value = '';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
+        });
+
+        function editAdmin(id) {
+            alert(`Edit Admin with ID: ${id}`);
+        }
+
+        function deleteAdmin(id) {
+            alert(`Delete Admin with ID: ${id}`);
+        }
+    </script>
+</body>
+</html>

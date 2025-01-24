@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - IT Workshop Inventory System</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4c8bf5, #6dd5ed);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-container h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-container label {
+            margin-top: 1rem;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .login-container input, .login-container select {
+            margin-top: 0.5rem;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .login-container button {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #4c8bf5;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #3a6dcf;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 1rem;
+            text-align: center;
+            width: 100%;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="loginForm" action="process_login.php" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="admin">Admin</option>
+                <option value="petugas">Petugas</option>
+            </select>
+        
+            <button type="submit">Login</button>
+        </form>
+        
+        
+    </div>
+    <footer>
+        &copy; 2025 IT Workshop Inventory System
+    </footer>
+</body>
+</html>
